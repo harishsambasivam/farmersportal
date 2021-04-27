@@ -7,7 +7,7 @@ dotenv.config({ path: "../config/config.env" });
 const server = express();
 
 // connect to mongodb atlas
-export const db = await connectDB();
+connectDB();
 
 server.use(express.json());
 

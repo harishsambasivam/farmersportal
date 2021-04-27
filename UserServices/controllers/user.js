@@ -1,12 +1,13 @@
-import { db } from "../index.js";
+import User from "../models/user.js";
 
-export const addUser = async (req, res) => {
+export const addUser = async (req, res, next) => {
   console.log(req.body);
   try {
-    const user = await db.collection("users").insertOne(req.body);
+    const user = new User(req.body);
+    user.save();
     return res.status(200).send({
       sucess: true,
-      data: user.ops,
+      data: user,
     });
   } catch (err) {
     console.log(err);
@@ -16,15 +17,14 @@ export const addUser = async (req, res) => {
   }
 };
 
-export const getUser = (req, res) => {
-  const { username } = req.params;
-  const user = db.collection("users").findOne({ username }, (err, results) => {
-    if (err) console.error(err);
-    else {
-      res.send({
-        data: results,
-        status: "success",
-      });
-    }
+export const getUser = async (req, res) => {
+  getUser1("email", function (error, user) {
+    if (error) return console.log(err);
+    console.log(user);
   });
+};
+
+const getUser1 = (email, callback) => {
+  var query = {};
+  User.find(query, callback);
 };
